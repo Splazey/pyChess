@@ -10,11 +10,10 @@ OFFSET = 0
 
 class Piece:
 
-    def __init__(self, screen, color):
+    def __init__(self, screen):
         self.selected = False
-        self.color = color
         self.screen = screen
-        self.p = "white/pawn.png"  # TODO: change later, it is always white pawn for testing purposes
+        self.p = "white\pawn.png"  # TODO: change later, it is always white pawn for testing purposes
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))  # Load and scale image once
         self.rect = self.img.get_rect()  # Get rect for positioning
@@ -25,7 +24,12 @@ class Piece:
         # Only blit the image, no need to reload it
         self.screen.blit(self.img, self.rect)
 
+    def validate(self):
+        pass
+
     def goto(self, c):
+        if not self.validate:
+            pass
         x = c[0]
         y = int(c[1])
 

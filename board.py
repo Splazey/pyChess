@@ -1,3 +1,10 @@
+import copy
+from pawn import Pawn
+from rook import Rook
+from knight import Knight
+from bishop import Bishop
+from queen import Queen
+from king import King
 
 # Board object class that stores pieces, and inputs and outputs FEN
 
@@ -13,14 +20,17 @@ OFFSET = 1
 
 
 
+
+
 class Board:
 
 
     def __init__(self, screen):
+
+
         self.b = []
         self.screen = screen
         self.moving = False
-
 
         for i in range(8):
             self.b.append(['.','.','.','.','.','.','.','.'])
@@ -42,27 +52,65 @@ class Board:
         y = 0
         x = 0
         for char in code:
+            print(f"-------------- NOW: {char}")
+            print(f"Y ={y}")
             if char.isdigit(): # it is a digit
                 x += int(char)
-            elif char != '/': # it is a letter
-                pass
-            if char == 'B':
-                new_piece = Piece(self.screen)
+                # print(f"x now: {x}")
+            elif char.isalpha(): # it is a letter
+                
+                if char.isupper():
+                    clr = 'w'
+                else:
+                    clr = 'b'
+                
+                if char.lower() == 'p':
+                    new_piece = Pawn(self.screen, clr)
+                elif char.lower() == 'r':
+                    new_piece = Rook(self.screen, clr)
+                elif char.lower() == 'n':
+                    new_piece = Knight(self.screen, clr)
+                elif char.lower() == 'b':
+                    new_piece = Bishop(self.screen, clr)
+                elif char.lower() == 'q':
+                    new_piece = Queen(self.screen, clr)
+                elif char.lower() == 'k':
+                    new_piece = King(self.screen, clr)
+                
                 self.b[y][x] = new_piece
+                print(f"x is {x + 97}")
+                print(f"y is {y}")
 
+                new_piece.goto(str(chr(x + 97)) + str(8 - y))
+
+                print(f"Piece spawned in {str(chr(x + 97)) + str(8 - y)}")
+
+                x += 1
+                print(f"x= {x}")
             else: # it is a slash
+                print("RESET X")
                 y += 1
+                x = 0
     
     def toggleMoving(self):
-
         self.moving = not self.moving
 
-    def render(self):
 
-        if self.moving: # if the user is moving a piece
-            for tile in self.b:
-                if isinstance(tile, Piece): # TODO: once all the pieces are done, check later if this would work with children classes of Piece
-                    pass
+    def renderPieces(self):
+        for row in self.b:
+            for cell in row:
+                if isinstance(cell, Piece):
+                    cell.render()
+
+    def getPieces(self):
+        return self.pieces
+
+    # def render(self):
+
+    #     if self.moving: # if the user is moving a piece
+    #         for tile in self.b:
+    #             if isinstance(tile, Piece): # TODO: once all the pieces are done, check later if this would work with children classes of Piece
+    #                 pass
 
 
     def getTile(self, x, y):

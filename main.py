@@ -1,6 +1,5 @@
 import pygame
 import board
-from piece import Piece
 
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 900,900
@@ -17,17 +16,15 @@ pygame.display.set_caption("PyChess")
 
 # TODO make a variable that stores the piece that is being selected
 b = board.Board(screen)
-
-test = Piece(screen, "test")
-test.goto("a1")
-
-# -----------------
+b.setFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+# ----------------- 
 
 
 board = pygame.image.load("board.png")
 board = pygame.transform.smoothscale(board, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-
+# test = Piece(screen)
+# test.goto("a1")
 
 # main game loop
 
@@ -43,8 +40,8 @@ while running:
             x, y = event.pos  # Get the x and y coordinates of the click
             print(f"You clicked on {b.getTile(x, y)}")
             print(f"x={x}, y={y}")
-            test.goto(b.getTile(x, y))  # Move the piece to the clicked tile
+            # test.goto(b.getTile(x, y))
+            # let the board object use its getTile() method and find what piece is being clicked on 
 
-    test.render()  # Render the piece after the board is drawn
-
+    b.renderPieces()
     pygame.display.update()  # Update the display
