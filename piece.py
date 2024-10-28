@@ -17,7 +17,9 @@ class Piece:
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))  # Load and scale image once
         self.rect = self.img.get_rect()  # Get rect for positioning
-        self.x = (x * X_MULTIPLIER) + OFFSET
+
+
+        self.x = (x* X_MULTIPLIER) + OFFSET
         self.y = (y * Y_MULTIPLIER) + OFFSET
 
         self.rect.center = (self.x, self.y)

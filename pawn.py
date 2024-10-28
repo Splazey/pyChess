@@ -1,8 +1,13 @@
 from piece import Piece
 import pygame
+from queen import Queen
 
 BLACK = "black\pawn.png"
 WHITE = "white\pawn.png"
+
+X_MULTIPLIER = 100
+Y_MULTIPLIER = 100
+OFFSET = 100
 
 
 class Pawn(Piece):
@@ -77,7 +82,6 @@ class Pawn(Piece):
                 legal.append(chr(x + 97) + str((9 - y) - i - 1))
 
 
-        # TODO pawn capturing
 
         # check the right side for a capturable opponent piece
         if x + 1 < 8 and isinstance(board[y + step[0]][x + 1], Piece) and board[y + step[0]][x + 1].white != self.white:
@@ -88,6 +92,7 @@ class Pawn(Piece):
             legal.append(chr(x - 1 + 97) + str((9 - y) - step[0] - 1))
 
 
+
         print(f"legal moves: {legal}")
         return legal
 
@@ -95,6 +100,22 @@ class Pawn(Piece):
     def __del__(self):
         pass
 
-    def promote(self): 
-        pass
-        #TODO: write a pawn promotion code here, strategy is still unclear
+    def promote(self): # pawn promotion code, called in the board class when the pawn hits the end of the board
+
+        x = int((self.x - OFFSET) / X_MULTIPLIER)
+        y = int((self.y - OFFSET) / Y_MULTIPLIER)
+
+
+        print("for promotion:")
+        print(f"x = {x}")
+        print(f"y = {y}")
+
+        if self.white:
+            color = 'w'
+        else:
+            color = 'b'
+
+        promoted = Queen(self.screen, color, x, y) # TODO implement support for letting the user pick the piece to promote to 
+
+        return promoted # return the new, promoted piece
+        

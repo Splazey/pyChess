@@ -171,10 +171,15 @@ class Board:
 
 
 
-            # if the piece that was moved is a pawn, revoke the double step
+            # special conditions if the piece that was moved is a pawn
             if isinstance(self.b[self.srcY][self.srcX], Pawn):
-                print("Removing double step...")
-                self.b[self.srcY][self.srcX].revokeDoubleStep()
+                
+                self.b[self.srcY][self.srcX].revokeDoubleStep() # revoke the double step attribute
+
+                if outer == 0 or outer == 7: # if the pawn has hit the end of the board, promote the pawn
+                    print("Promotion!")
+                    self.b[outer][inner] = self.b[self.srcY][self.srcX].promote()
+
 
 
 

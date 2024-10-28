@@ -22,5 +22,5 @@ class Bishop(Piece):
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
-    def checkLegal(self, board):
+    def checkLegal(self, x, y, board):
         pass
