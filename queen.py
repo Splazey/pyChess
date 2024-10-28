@@ -14,11 +14,13 @@ class Queen(Piece):
 
         if color == 'b':
             self.p = BLACK
+            self.white = False
         else:
             self.p = WHITE
+            self.white = True
     
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
-    def validate(self):
+    def checkLegal(self, board):
         pass

@@ -8,18 +8,93 @@ WHITE = "white\pawn.png"
 class Pawn(Piece):
 
 
-    def __init__(self, screen, color):
-        super().__init__(screen)
+    def __init__(self, screen, color, x, y):
+        super().__init__(screen, x, y)
+
+        self.firstMove = True
 
         if color == 'b':
             self.p = BLACK
+            self.white = False
         else:
             self.p = WHITE
-        
+            self.white = True
+
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
+    def revokeDoubleStep(self):
+        self.firstMove = False
+
+    def checkLegal(self, x, y, board):
 
 
-    def validate(self):
+        print(f"x = {x}")
+        print(f"y = {y}")
+        
+        # PROBLEMS
+        # both white and black check downwards
+        # the checking happens after the dest has been chosen, as if the piece moved
+        # ^^ reason is because of using dest coordinates instead of source in goto()
+        # TODO fix both
+
+
+
+        print(f"You want to go to {x},{y}")
+
+
+        if not board:
+            print(f"returning {chr(x + 97) + str(9 - y)}")
+            return [chr(x + 97) + str(8 - y)]
+
+        legal = []
+
+        if self.firstMove:
+            step = [1,2]
+
+        else: 
+            step = [1]
+        
+        if self.white: # the pawn is white
+            print("white pawn detected")
+            for i in range(len(step)):
+                step[i] = step[i] * -1
+
+
+
+        print(f"step array for this piece: {step}")
+
+        print("The board now:")
+        
+
+        for b in board:
+            print(b)
+
+
+        for i in step: # check forward
+            print(f"checking {[y + i]},{[x]}")
+            if y+i >= 0 and y+i < 8 and board[y + i][x] == '.':
+                legal.append(chr(x + 97) + str((9 - y) - i - 1))
+
+
+        # TODO pawn capturing
+
+        # check the right side for a capturable opponent piece
+        if x + 1 < 8 and isinstance(board[y + step[0]][x + 1], Piece) and board[y + step[0]][x + 1].white != self.white:
+            legal.append(chr(x + 1 + 97) + str((9 - y) - step[0] - 1))
+
+        # check the left side for a capturable opponent piece
+        if x - 1 >= 0 and isinstance(board[y + step[0]][x - 1], Piece) and board[y + step[0]][x - 1].white != self.white:
+            legal.append(chr(x - 1 + 97) + str((9 - y) - step[0] - 1))
+
+
+        print(f"legal moves: {legal}")
+        return legal
+
+
+    def __del__(self):
         pass
+
+    def promote(self): 
+        pass
+        #TODO: write a pawn promotion code here, strategy is still unclear

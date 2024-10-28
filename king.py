@@ -7,6 +7,7 @@ BLACK = "black\king.png"
 WHITE = "white\king.png"
 
 
+
 class King(Piece):
 
 
@@ -15,12 +16,14 @@ class King(Piece):
 
         if color == 'b':
             self.p = BLACK
+            self.white = False
         else:
             self.p = WHITE
+            self.white = True
 
     
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
-    def validate():
+    def checkLegal(self, board):
         pass
