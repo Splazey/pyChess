@@ -19,7 +19,7 @@ pygame.display.set_caption("PyChess")
 
 # TODO make a variable that stores the piece that is being selected
 b = board.Board(screen)
-b.setFEN("4p2p/8/8/8/8/8/8/3P4")
+b.setFEN("3R2k1/8/4p3/8/2K1R2r/8/3p4/8")
 turn = True
 
 

@@ -9,8 +9,8 @@ WHITE = "white\\bishop.png"
 class Bishop(Piece):
 
 
-    def __init__(self, screen, color):
-        super().__init__(screen)
+    def __init__(self, screen, color, x, y):
+        super().__init__(screen, x, y)
 
         if color == 'b':
             self.p = BLACK

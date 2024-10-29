@@ -9,8 +9,8 @@ WHITE = "white\knight.png"
 class Knight(Piece):
 
 
-    def __init__(self, screen, color):
-        super().__init__(screen)
+    def __init__(self, screen, color, x, y):
+        super().__init__(screen, x, y)
 
         if color == 'b':
             self.p = BLACK
@@ -23,4 +23,4 @@ class Knight(Piece):
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
     def checkLegal(self, x, y, board):
-        pass
+        return 

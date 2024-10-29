@@ -34,23 +34,8 @@ class Pawn(Piece):
     def checkLegal(self, x, y, board):
 
 
-        print(f"x = {x}")
-        print(f"y = {y}")
-        
-        # PROBLEMS
-        # both white and black check downwards
-        # the checking happens after the dest has been chosen, as if the piece moved
-        # ^^ reason is because of using dest coordinates instead of source in goto()
-        # TODO fix both
-
-
-
         print(f"You want to go to {x},{y}")
 
-
-        if not board:
-            print(f"returning {chr(x + 97) + str(9 - y)}")
-            return [chr(x + 97) + str(8 - y)]
 
         legal = []
 
