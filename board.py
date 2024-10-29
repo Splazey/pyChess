@@ -130,7 +130,6 @@ class Board:
             return chr(xc + 96) + str(yc) # works for now
         return "x0" # return an invalid coordinate indicator
 
-    
 
 
 
@@ -164,12 +163,16 @@ class Board:
                 return False # return a false message to the program that a move has not been made yet
             
 
+            # TODO call checkCheck() if the moved piece was a king
+            
+
+
             # move the piece to the clicked position
             if isinstance(self.b[outer][inner], Piece):
                 print(f"piece in {c} was deleted.")
             self.b[outer][inner] = self.b[self.srcY][self.srcX]
 
-
+            print(f"king would now be in {self.getTile(self.srcX, self.srcY)}")
 
             # special conditions if the piece that was moved is a pawn
             if isinstance(self.b[self.srcY][self.srcX], Pawn):
@@ -179,7 +182,6 @@ class Board:
                 if outer == 0 or outer == 7: # if the pawn has hit the end of the board, promote the pawn
                     print("Promotion!")
                     self.b[outer][inner] = self.b[self.srcY][self.srcX].promote()
-
 
 
 
