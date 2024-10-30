@@ -25,6 +25,9 @@ class King(Piece):
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))
 
+        self.playing = False
+
+
     def getCheckTiles(self, board):
         y = 0
         ct = []
@@ -33,6 +36,8 @@ class King(Piece):
             for tile in row:
                 if isinstance(tile, Piece) and tile.white != self.white:
                     # print(f"{type(tile)} on {x},{y}")
+                    if isinstance(tile, King) and tile.playing == True:
+                        continue
                     ct.extend(tile.checkLegal(x,y,board))
                 x += 1
             y += 1
@@ -43,7 +48,7 @@ class King(Piece):
         return not location in danger
 
     def checkLegal(self, x, y, board):
-        
+        self.playing = True
         ct = self.getCheckTiles(board)
 
 
@@ -74,6 +79,8 @@ class King(Piece):
                     # if it is an empty tile, or a tile in which an enemy is in
                     if self.isSafe(chr(x + x_offset + 97) + str((9 - y) - y_offset - 1), ct):
                         legal.append(chr(x + x_offset + 97) + str((9 - y) - y_offset - 1)) # add that tile to the legal moves array
+
+        self.playing = False
 
         print(f"Legal moves: {legal}")
         return legal

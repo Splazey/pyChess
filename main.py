@@ -1,5 +1,6 @@
 import pygame
 import board
+from highlighter import Highlighter
 
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 900,900
@@ -19,10 +20,10 @@ pygame.display.set_caption("PyChess")
 
 # TODO make a variable that stores the piece that is being selected
 b = board.Board(screen)
-b.setFEN("2q5/8/7r/3K4/8/6n1/8/8")
+b.setFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 turn = True
-
-
+# test = Highlighter(screen)
+# test.circleHighlight(["b2"])
 
 # ----------------- 
 
@@ -45,5 +46,10 @@ while running:
             # test.goto(b.getTile(x, y))
             # let the board object use its getTile() method and find what piece is being clicked on 
 
-    b.renderPieces()
+    # test.renderElements()
+
+    b.renderHighlights() # render the highlights made by the board
+
+    b.renderPieces() # render the pieces stored in the board
+
     pygame.display.update()  # Update the display

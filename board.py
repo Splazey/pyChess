@@ -1,5 +1,9 @@
-import copy
+
 import pygame
+from highlighter import Highlighter
+
+
+# pieces importing
 from pawn import Pawn
 from rook import Rook
 from knight import Knight
@@ -30,10 +34,14 @@ class Board:
 
 
         self.b = []
+
         self.screen = screen
+        self.h = Highlighter(self.screen)
         self.moving = False
         self.srcX = -1
         self.srcY = -1
+
+
 
         for i in range(8):
             self.b.append(['.','.','.','.','.','.','.','.'])
@@ -105,6 +113,7 @@ class Board:
     
     def toggleMoving(self, inner, outer):
         self.moving = not self.moving
+        print(f"moving is now {self.moving}")
         self.srcX = outer
         self.srcY = inner
 
@@ -115,6 +124,10 @@ class Board:
                 if isinstance(cell, Piece):
                     cell.render()
 
+
+    def renderHighlights(self):
+        self.h.renderElements()
+
     def getPieces(self):
         return self.pieces
 
@@ -123,8 +136,6 @@ class Board:
         xc = int(round((x - OFFSET)/ Y_DIVISOR))
         yc = 9 - int(round((y + OFFSET)/ Y_DIVISOR))
 
-        print(f"xc = {xc}")
-        print(f"yc = {yc}")
 
         if xc <= 8 and xc > 0 and yc <= 8 and  yc > 0:
             return chr(xc + 96) + str(yc) # works for now
@@ -135,8 +146,8 @@ class Board:
 
 
     def movePiece(self, x, y, turn): 
-
         c = self.getTile(x,y)
+        print(f"mp called on {c}")
 
         inner = (97 - ord(c[0])) * -1
         outer = 8 - int(c[1])
@@ -149,17 +160,54 @@ class Board:
 
 
         if self.moving: # x and y here will refer to DESTINATION
-
             # if the player has already selected a piece and is trying to select its destination
             # also checks if the destination position is empty, or is for an enemy team
 
+            if self.srcX == -2:
+                print("PEICE CHANGE DETECTED")
+                self.h.clearElements()
+
+
+                legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
+                self.h.circleHighlight()
+
+                # print("DIFFERENT PIECE PICKED")
+                return False
+
+            # in case the player chooses to move a different piece
+            if isinstance(self.b[outer][inner], Piece) and self.b[outer][inner].white == turn:
+
+                print("Piece change case")
+
+                # edit the source to become the 
+                self.srcX = inner
+                self.srcY = outer
+
+                self.h.clearElements()
+
+                legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
+
+                self.h.circleHighlight(legal)
+
+                srcX = outer
+
+
+                return False # Abort the function call, since another movePiece() will be called by the driver for the different picked piece
 
                 
             # if self.b[inner][outer] != '.' and self.b[inner][outer].white != turn:
             #     print("opponent piece selected")
             if not self.b[self.srcY][self.srcX].goto(c, self.b): # execute the goto function, involves checking whether the move is legal or not
-                print("returning false to the driver")
+                # print("returning false to the driver")
+                
                 self.toggleMoving(-1, -1)
+        
+                self.h.clearElements()
+
+                # legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
+
+                # self.h.circleHighlight(legal)
+
                 return False # return a false message to the program that a move has not been made yet
             
 
@@ -168,11 +216,11 @@ class Board:
 
 
             # move the piece to the clicked position
-            if isinstance(self.b[outer][inner], Piece):
-                print(f"piece in {c} was deleted.")
+            # if isinstance(self.b[outer][inner], Piece):
+            #     print(f"piece in {c} was deleted.")
             self.b[outer][inner] = self.b[self.srcY][self.srcX]
 
-            print(f"king would now be in {self.getTile(self.srcX, self.srcY)}")
+            # print(f"king would now be in {self.getTile(self.srcX, self.srcY)}")
 
             # special conditions if the piece that was moved is a pawn
             if isinstance(self.b[self.srcY][self.srcX], Pawn):
@@ -180,7 +228,7 @@ class Board:
                 self.b[self.srcY][self.srcX].revokeDoubleStep() # revoke the double step attribute
 
                 if outer == 0 or outer == 7: # if the pawn has hit the end of the board, promote the pawn
-                    print("Promotion!")
+                    # print("Promotion!")
                     self.b[outer][inner] = self.b[self.srcY][self.srcX].promote()
 
 
@@ -188,23 +236,23 @@ class Board:
 
             self.b[self.srcY][self.srcX] = '.' # set the initial position to empty
 
-            print(f"Piece moved to {c}")
-            self.printBoard()
 
-            self.toggleMoving(-1, -1)
+
+            self.toggleMoving(-1, -1) # declare that the move has been made
+
+            self.h.clearElements() # clear the highlighting made for the legal moves, since the move has already been made
 
             return True # return a true message to the driver program, indicating that a move has been made
         
         elif isinstance(self.b[outer][inner], Piece) and self.b[outer][inner].white == turn: # x and y here will refer to SOURCE
             # check if the clicked coordinates have a piece in them, and if the piece matches the turn specified by the driver program
             
-            print(f"{self.b[outer][inner]} is now being moved")
             self.toggleMoving(outer, inner) # srcX and srcY are updated here
 
+            legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
 
-
+            self.h.circleHighlight(legal)
 
             return False # return a false message to the driver program, indicating that a move has not been made yet
-        
         
         return False

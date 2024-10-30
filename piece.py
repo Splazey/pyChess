@@ -48,8 +48,6 @@ class Piece:
             print("Illegal Move Detected")
             return False
 
-        
-
 
         # Calculate the new position based on the board array coordinates
         self.x = ((ord(x) - 96) * X_MULTIPLIER)
@@ -59,8 +57,3 @@ class Piece:
         self.rect.center = (self.x, self.y)
 
         return True
-    
-
-
-
-    
