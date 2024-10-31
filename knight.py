@@ -44,7 +44,6 @@ class Knight(Piece):
 
 
             if 0 <= x + x_offset < 8 and 0 <= y + y_offset < 8:
-                print(f"checking {chr(x + x_offset + 97) + str((9 - y) - y_offset - 1)}")
                 if board[y + y_offset][x + x_offset] == '.' or (isinstance(board[y + y_offset][x + x_offset], Piece) and board[y + y_offset][x + x_offset].white != self.white):
                     # if it is an empty tile, or a tile in which an enemy is in
                     legal.append(chr(x + x_offset + 97) + str((9 - y) - y_offset - 1)) # add that tile to the legal moves array

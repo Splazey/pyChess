@@ -34,7 +34,6 @@ class Pawn(Piece):
     def checkLegal(self, x, y, board):
 
 
-        print(f"You want to go to {x},{y}")
 
 
         legal = []
@@ -46,15 +45,11 @@ class Pawn(Piece):
             step = [1]
         
         if self.white: # the pawn is white
-            print("white pawn detected")
             for i in range(len(step)):
                 step[i] = step[i] * -1
 
 
 
-        print(f"step array for this piece: {step}")
-
-        print("The board now:")
         
 
         for b in board:
@@ -62,7 +57,6 @@ class Pawn(Piece):
 
 
         for i in step: # check forward
-            print(f"checking {[y + i]},{[x]}")
             if y+i >= 0 and y+i < 8 and board[y + i][x] == '.':
                 legal.append(chr(x + 97) + str((9 - y) - i - 1))
 
@@ -91,9 +85,6 @@ class Pawn(Piece):
         y = int((self.y - OFFSET) / Y_MULTIPLIER)
 
 
-        print("for promotion:")
-        print(f"x = {x}")
-        print(f"y = {y}")
 
         if self.white:
             color = 'w'

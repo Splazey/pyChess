@@ -169,7 +169,7 @@ class Board:
 
 
                 legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
-                self.h.circleHighlight()
+                self.h.highlightMovements(legal, self.b)
 
                 # print("DIFFERENT PIECE PICKED")
                 return False
@@ -187,7 +187,7 @@ class Board:
 
                 legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
 
-                self.h.circleHighlight(legal)
+                self.h.highlightMovements(legal, self.b)
 
                 srcX = outer
 
@@ -251,7 +251,7 @@ class Board:
 
             legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
 
-            self.h.circleHighlight(legal)
+            self.h.highlightMovements(legal, self.b)
 
             return False # return a false message to the driver program, indicating that a move has not been made yet
         

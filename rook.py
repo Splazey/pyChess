@@ -49,11 +49,9 @@ class Rook(Piece):
 
             while 0 <= y + y_offset < 8 and 0 <= x + x_offset < 8:
                 if isinstance(board[y + y_offset][x + x_offset], Piece):
-                    print(f"Blocking Piece! in {chr(x + x_offset + 97) + str((9 - y) - y_offset - 1)}")
 
                     if board[y + y_offset][x + x_offset].white != self.white:
                         # the blocking piece is an enemy piece
-                        print("enemy in range!")
                         legal.append(chr(x + x_offset + 97) + str((9 - y) - y_offset - 1)) # add that tile to the legal moves array
                     break # stop exploring further since there is a blocking piece
                 else:

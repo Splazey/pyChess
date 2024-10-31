@@ -26,5 +26,4 @@ class Circle:
 
 
     def render(self):
-        # print(f"coords :{(self.x - self.radius, self.y - self.radius)}")
         self.screen.blit(self.surface, (self.x - self.radius - OFFSET, self.y - self.radius + OFFSET))
