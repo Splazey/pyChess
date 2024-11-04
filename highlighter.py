@@ -2,6 +2,7 @@ import pygame
 from circle import Circle
 from square import Square
 from piece import Piece
+from king import King
 
 X_MULTIPLIER = 100
 Y_MULTIPLIER = 100
@@ -33,7 +34,7 @@ class Highlighter:
             new_element = Circle(x,y, self.screen)
             self.elements.append(new_element)
     
-    def squareHighlight(self, coords):
+    def captureHighlight(self, coords):
         # will take in an array of coordinates, draw low opacity circles 
 
 
@@ -62,8 +63,27 @@ class Highlighter:
                 circles.append(c)
         
         self.circleHighlight(circles)
-        self.squareHighlight(squares)
+        self.captureHighlight(squares)
 
+    def checkHighlight(self, board):
+
+        whiteCoverage = []
+        blackCoverage = []
+
+        whiteKing = []
+        blackKing = []
+
+        for row in board:
+            for tile in row:
+                if isinstance(tile, King):
+                    if tile.white:
+                        whiteKing.append()
+                    else:
+                        pass
+                elif isinstance(tile, Piece) and tile.white:
+                    whiteCoverage.extend(tile.checkLegal())
+                elif isinstance(tile, Piece) and not tile.white:
+                    blackCoverage.extend(tile.checkLegal())
 
     def renderElements(self):
 

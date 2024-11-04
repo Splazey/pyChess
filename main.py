@@ -9,44 +9,26 @@ pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 screen.fill((0,0,0)) # fill the screen with black color
-pygame.display.set_caption("PyChess")
+pygame.display.set_caption("PyChess Project") # Window title
 
 
-# TODO the turn system will be implemented in main
-
-
-#variables go below:
-
-
-# TODO make a variable that stores the piece that is being selected
 b = board.Board(screen)
-b.setFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+b.setFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") # FEN code for the chess board position
 turn = True
-# test = Highlighter(screen)
-# test.circleHighlight(["b2"])
-
-# ----------------- 
 
 # main game loop
-
 running = True
 
 while running:
-    b.blitBoard()
+    b.blitBoard() # render the board itself
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos  # Get the x and y coordinates of the click
-            print(f"You clicked on {b.getTile(x, y)}")
-            # print(f"x={x}, y={y}")
             if b.movePiece(x, y, turn):
-                turn = not turn
-            # test.goto(b.getTile(x, y))
-            # let the board object use its getTile() method and find what piece is being clicked on 
-
-    # test.renderElements()
+                turn = not turn # if a piece has been moved (movePiece() returns a True status), change the turns
 
     b.renderHighlights() # render the highlights made by the board
 

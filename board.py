@@ -1,9 +1,18 @@
 
+# Board class that stores pieces, and inputs and outputs FEN
+# the board will use the piece objects, while the main program will use the board
+# when a piece is picked, the main program communicates with the piece for move validation,
+# the board class also communicates with the Highlighter class 
+# to show the legal moves to the user once a piece is selected
+
+
+# main library importing
 import pygame
 from highlighter import Highlighter
 
 
 # pieces importing
+from piece import Piece
 from pawn import Pawn
 from rook import Rook
 from knight import Knight
@@ -11,14 +20,8 @@ from bishop import Bishop
 from queen import Queen
 from king import King
 
-# Board object class that stores pieces, and inputs and outputs FEN
 
-# the board will use the piece objects, while the main program will use the board
-
-# when a piece is picked, the main program communicates with the piece, the board should only keep a low opacity copy of the piece in its initial pos
-
-from piece import Piece
-
+# variables for coordinates control of board elements
 X_DIVISOR = 100
 Y_DIVISOR = 100
 OFFSET = 1
@@ -33,29 +36,29 @@ class Board:
     def __init__(self, screen):
 
 
-        self.b = []
+        self.b = [] # 2D array to store the board pieces, empty tiles are denoted by "."
 
         self.screen = screen
-        self.h = Highlighter(self.screen)
+        self.h = Highlighter(self.screen) # Highlighter object, used by the board to highlight legal moves
         self.moving = False
+
+        # X and Y coordinates variables to store the position of the piece that has been previously selected
         self.srcX = -1
         self.srcY = -1
 
 
-
+        # initialize the board by making it empty
         for i in range(8):
             self.b.append(['.','.','.','.','.','.','.','.'])
 
+        # load the board image (board.png)
         self.brd = pygame.image.load("board.png")
         self.brd = pygame.transform.smoothscale(self.brd, (self.screen.get_width(),self.screen.get_height()))
 
-        # self.printBoard()
-
-
-    def blitBoard(self):
+    def blitBoard(self): # Function to only blit the board at the background
         self.screen.blit(self.brd, (0,0))
 
-    def printBoard(self): # method used for debugging, prints the board to the terminal
+    def printBoard(self): # Debugging function used to print the board position to the terminal, any pieces are indicated by a "p"
         
         for row in self.b:
             for cell in range(8):
@@ -65,10 +68,11 @@ class Board:
                     print(f"  {row[cell]}",end="")
             print()
 
-    def getFEN():
+    def getFEN(): # Function to return the FEN code of the current board position
+        # TODO: complete this function
         pass
 
-    def setFEN(self, code):
+    def setFEN(self, code): # modifies the board array to have the same position as the FEN code specified in the argument
         y = 0
         x = 0
         for char in code: # iterate through each character of the FEN code
@@ -99,11 +103,6 @@ class Board:
                 
                 self.b[y][x] = new_piece
 
-                # new_piece.goto(str(chr(x + 97)) + str(8 - y), [])
-
-                # self.printBoard()
-
-
                 x += 1
             
             
@@ -111,67 +110,65 @@ class Board:
                 y += 1
                 x = 0
     
-    def toggleMoving(self, inner, outer):
+    def toggleMoving(self, inner, outer): # toggles the state of the board from selection mode to moving mode
+        
         self.moving = not self.moving
-        print(f"moving is now {self.moving}")
+        
+        # Update the selected (source) piece positions
         self.srcX = outer
         self.srcY = inner
 
 
-    def renderPieces(self):
+    def renderPieces(self): # Function to call the render() function all piece objects on the board array
         for row in self.b:
             for cell in row:
                 if isinstance(cell, Piece):
                     cell.render()
 
 
-    def renderHighlights(self):
+    def renderHighlights(self): # Function to call renderElements() for the highlighter of the board
         self.h.renderElements()
 
-    def getPieces(self):
-        return self.pieces
 
-    def getTile(self, x, y): # based on the click position, calculates the tile that the user clicked on
-        # print(f"{yc + OFFSET}/{Y_DIVISOR}={round((yc + OFFSET)/ Y_DIVISOR)}") 
+    def getTile(self, x, y): # Function to convert screen coordinates to chess tile coordinates (e.g. "b4")
+        
         xc = int(round((x - OFFSET)/ Y_DIVISOR))
         yc = 9 - int(round((y + OFFSET)/ Y_DIVISOR))
 
 
         if xc <= 8 and xc > 0 and yc <= 8 and  yc > 0:
-            return chr(xc + 96) + str(yc) # works for now
+            return chr(xc + 96) + str(yc)
+        
         return "x0" # return an invalid coordinate indicator
 
 
 
 
 
-    def movePiece(self, x, y, turn): 
-        c = self.getTile(x,y)
-        print(f"mp called on {c}")
+    def movePiece(self, x, y, turn): # Function to handle piece movement, as well as legal moves highlighting once a piece has been selected
 
+        # This function works in two modes, the mode is determined based on self.moving.
+        # When a player selects a piece to move, self.moving is set to true, legal moves are highlighted
+        # When a player moves the piece, the goto() function is called for the piece selected (indicated by self.srcX and self.srcY)
+
+
+        c = self.getTile(x,y) # convert the given click coordinates into a chess tile coordinate 
+
+        # Generate inner and outer, indexes that point to the array (self.b) position that points to the piece that has been clicked
         inner = (97 - ord(c[0])) * -1
         outer = 8 - int(c[1])
 
-        if inner == 23:
-            print("Invalid position clicked.")
-            return
-
-        print(f"clicked on coords: {outer},{inner}, aka {c}")
-
-
         if self.moving: # x and y here will refer to DESTINATION
             # if the player has already selected a piece and is trying to select its destination
-            # also checks if the destination position is empty, or is for an enemy team
+            # also checks if the destination position is empty, or is occupied by an opponent piece
 
+            # if the source piece is null, 
             if self.srcX == -2:
-                print("PEICE CHANGE DETECTED")
                 self.h.clearElements()
-
 
                 legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
                 self.h.highlightMovements(legal, self.b)
 
-                # print("DIFFERENT PIECE PICKED")
                 return False
 
             # in case the player chooses to move a different piece
