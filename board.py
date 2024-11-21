@@ -145,12 +145,11 @@ class Board:
 
 
 
-    def movePiece(self, x, y, turn): # Function to handle piece movement, as well as legal moves highlighting once a piece has been selected
+    def movePiece(self, x, y, turn): # Function to handle piece movement, as well as highlighting legal moves once a piece has been selected
 
         # This function works in two modes, the mode is determined based on self.moving.
         # When a player selects a piece to move, self.moving is set to true, legal moves are highlighted
         # When a player moves the piece, the goto() function is called for the piece selected (indicated by self.srcX and self.srcY)
-
 
         c = self.getTile(x,y) # convert the given click coordinates into a chess tile coordinate 
 
@@ -162,7 +161,7 @@ class Board:
             # if the player has already selected a piece and is trying to select its destination
             # also checks if the destination position is empty, or is occupied by an opponent piece
 
-            # if the source piece is null, 
+
             if self.srcX == -2:
                 self.h.clearElements()
 
@@ -174,36 +173,25 @@ class Board:
             # in case the player chooses to move a different piece
             if isinstance(self.b[outer][inner], Piece) and self.b[outer][inner].white == turn:
 
-                print("Piece change case")
-
-                # edit the source to become the 
+                # edit the source to become the new piece that was selected
                 self.srcX = inner
                 self.srcY = outer
 
                 self.h.clearElements()
 
-                legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
+                legal = self.b[outer][inner].checkLegal(inner, outer, self.b) # store the coordinates of the legal moves
 
                 self.h.highlightMovements(legal, self.b)
-
-                srcX = outer
-
 
                 return False # Abort the function call, since another movePiece() will be called by the driver for the different picked piece
 
                 
-            # if self.b[inner][outer] != '.' and self.b[inner][outer].white != turn:
-            #     print("opponent piece selected")
             if not self.b[self.srcY][self.srcX].goto(c, self.b): # execute the goto function, involves checking whether the move is legal or not
                 # print("returning false to the driver")
                 
                 self.toggleMoving(-1, -1)
         
                 self.h.clearElements()
-
-                # legal = self.b[outer][inner].checkLegal(inner, outer, self.b)
-
-                # self.h.circleHighlight(legal)
 
                 return False # return a false message to the program that a move has not been made yet
             
