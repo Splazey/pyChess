@@ -1,5 +1,5 @@
 # pyChess
-An improved second generation of my old Python Chess game. Made entirely in Python
+An improved version of my old Python Chess game. Made entirely in Python with OOP
 
 
 # Libraries Included
