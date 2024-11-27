@@ -19,6 +19,10 @@ turn = True
 # main game loop
 running = True
 
+
+# TODO voice recognition
+# TODO hand guesture as a secondary feature
+
 while running:
     b.blitBoard() # render the board itself
 

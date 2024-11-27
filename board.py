@@ -152,7 +152,9 @@ class Board:
         # When a player moves the piece, the goto() function is called for the piece selected (indicated by self.srcX and self.srcY)
 
         c = self.getTile(x,y) # convert the given click coordinates into a chess tile coordinate 
-
+        if c == "x0":
+            return False
+        
         # Generate inner and outer, indexes that point to the array (self.b) position that points to the piece that has been clicked
         inner = (97 - ord(c[0])) * -1
         outer = 8 - int(c[1])
