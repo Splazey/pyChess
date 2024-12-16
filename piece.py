@@ -37,14 +37,17 @@ class Piece:
 
     def goto(self, c, board):
         
+
         x = c[0]
         y = int(c[1])
 
+
         cx = (self.x - OFFSET) // 100
         cy = (self.y - OFFSET) // 100
+        print(f"GOTO: {cx},{cy}")
 
         
-        if c not in self.checkLegal(cx, cy, board): # TODO fix this so it has the CURRENT position rather than the destination position
+        if c not in self.checkLegal(cx, cy, board):
             print("Illegal Move Detected")
             return False
 

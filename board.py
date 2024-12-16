@@ -143,21 +143,25 @@ class Board:
 
 
 
-
-
-    def movePiece(self, x, y, turn): # Function to handle piece movement, as well as highlighting legal moves once a piece has been selected
+    def movePiece(self, x, y, turn, format): # Function to handle piece movement, as well as highlighting legal moves once a piece has been selected
 
         # This function works in two modes, the mode is determined based on self.moving.
         # When a player selects a piece to move, self.moving is set to true, legal moves are highlighted
         # When a player moves the piece, the goto() function is called for the piece selected (indicated by self.srcX and self.srcY)
-
-        c = self.getTile(x,y) # convert the given click coordinates into a chess tile coordinate 
-        if c == "x0":
-            return False
+        if format == 'coordinate':
+            c = self.getTile(x,y) # convert the given click coordinates into a chess tile coordinate 
+            if c == "x0":
+                return False
+        elif format == 'character':
+            c = [x, y]
         
+        print(f"c = {c}")
         # Generate inner and outer, indexes that point to the array (self.b) position that points to the piece that has been clicked
         inner = (97 - ord(c[0])) * -1
         outer = 8 - int(c[1])
+
+        if not 0 <= inner <= 8 or not 0 <= outer <= 8:
+            return False
 
         if self.moving: # x and y here will refer to DESTINATION
             # if the player has already selected a piece and is trying to select its destination
@@ -188,7 +192,7 @@ class Board:
                 return False # Abort the function call, since another movePiece() will be called by the driver for the different picked piece
 
                 
-            if not self.b[self.srcY][self.srcX].goto(c, self.b): # execute the goto function, involves checking whether the move is legal or not
+            if not self.b[self.srcY][self.srcX].goto(''.join(c), self.b): # execute the goto function, involves checking whether the move is legal or not
                 # print("returning false to the driver")
                 
                 self.toggleMoving(-1, -1)
@@ -219,10 +223,7 @@ class Board:
                     self.b[outer][inner] = self.b[self.srcY][self.srcX].promote()
 
 
-
-
             self.b[self.srcY][self.srcX] = '.' # set the initial position to empty
-
 
 
             self.toggleMoving(-1, -1) # declare that the move has been made
