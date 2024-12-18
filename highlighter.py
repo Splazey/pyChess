@@ -4,7 +4,7 @@ from square import Square
 from piece import Piece
 from king import King
 
-X_MULTIPLIER = 100
+X_MULTIPLIER = 102
 Y_MULTIPLIER = 100
 
 

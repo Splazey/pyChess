@@ -3,7 +3,7 @@ import pygame
 
 
 # TODO: calibrate them to have the coordinates be accurate for all tiles
-X_MULTIPLIER = 100
+X_MULTIPLIER = 102
 Y_MULTIPLIER = 100
 OFFSET = 100
 
@@ -54,7 +54,7 @@ class Piece:
 
         # Calculate the new position based on the board array coordinates
         self.x = ((ord(x) - 96) * X_MULTIPLIER)
-        self.y = ((9 - y) * X_MULTIPLIER)
+        self.y = ((9 - y) * Y_MULTIPLIER)
 
         # Update rect position
         self.rect.center = (self.x, self.y)
