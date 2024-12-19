@@ -40,7 +40,14 @@ class ChessTimer:
 
     def is_game_over(self):
         # Check if either player's time has run out
-        return self.user1_time <= 0 or self.user2_time <= 0
+        times = self.get_times()
+        if times[0] == '00:00':
+            print("Black wins!")
+            return "Black wins!"
+        elif times[1] == '00:00':
+            print("White wins!")
+            return "White wins!"
+        return None
 
 
 

@@ -18,7 +18,7 @@ RECORD_SECONDS = 4
 WAVE_OUTPUT_FILENAME = "output.wav"
 
 model_size = "small" # TODO must be large-v3
-model = WhisperModel(model_size, device="cpu", compute_type="int8")
+model = WhisperModel(model_size, device="cuda", compute_type="float16")
 
 print("model loading done")
 
@@ -27,7 +27,7 @@ p = pyaudio.PyAudio()
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.fill((0, 0, 0))  # fill the screen with black color
-pygame.display.set_caption("PyChess Project")  # Window title
+pygame.display.set_caption("Voice Controlled Chess - AIT102")  # Title of the window
 
 b = board.Board(screen)
 b.setFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")  # FEN code for the chess board position
@@ -65,7 +65,9 @@ listening_thread = threading.Thread(target=voice_recognition, daemon=True)
 listening_thread.start()
 
 timer = ChessTimer(usertime=600.0)  # Timer for 10 minutes per player
-font = pygame.font.SysFont("DS-Digital", 40)  # Pygame font for displaying the timer
+font = pygame.font.SysFont("DS-Digital", 50)  # Pygame font for displaying the timer
+game_end = pygame.font.SysFont("DS-Digital", 80)
+
 
 # Main game loop
 while running:
@@ -105,11 +107,14 @@ while running:
 
     # Blit the timers to their new positions
     screen.blit(black_timer_surface, (970 - black_timer_surface.get_width() // 2, black_timer_y))  # Top center for Black
-    screen.blit(white_timer_surface, (970- white_timer_surface.get_width() // 2, white_timer_y))  # Bottom center for White
+    screen.blit(white_timer_surface, (970 - white_timer_surface.get_width() // 2, white_timer_y))  # Bottom center for White
 
     # Check for timeout
     if timer.is_game_over():
-        print("Game Over: Time's Up!")
+        print("Game Over!")
+        game_end = font.render(timer.is_game_over(), True, (0,0,0))
+        # while True:
+        screen.blit(game_end, (450, 450))
         running = False
         
     b.renderHighlights()  # render the highlights made by the board

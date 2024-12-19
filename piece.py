@@ -13,7 +13,7 @@ class Piece:
     def __init__(self, screen, x, y):
         self.selected = False
         self.screen = screen
-        self.p = "white\pawn.png"  # TODO: change later, it is always white pawn for testing purposes
+        self.p = "white\pawn.png"  # if not set by the child object, a piece object is a white pawn by default
         self.img = pygame.image.load(self.p).convert_alpha()
         self.img = pygame.transform.smoothscale(self.img, (100, 100))  # Load and scale image once
         self.rect = self.img.get_rect()  # Get rect for positioning
